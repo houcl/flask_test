@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <encoding>utf-8</encoding>
+  <url_pattern>http://www.bjjtgl.gov.cn/zhuanti/10weihao.+</url_pattern>
+  <match target="image">
+    <xpath>//div[@class="wrap"]/img/@src</xpath>
+    <prefix no_duplicate='true'>http://www.bjjtgl.gov.cn/zhuanti/10weihao/</prefix>
+  </match>
+</template>

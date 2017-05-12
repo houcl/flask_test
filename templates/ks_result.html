@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+<style>
+#all{
+    margin:20px auto;
+    width:500px; /* 必须制定宽度 */
+    height:200px;
+    #background-color:blue;
+}
+#header {
+    background: #000;
+    height: 40px;
+    color: #fff;
+    line-height: 34px;
+    font-size: 20px;
+    padding: 0 10px;
+    text-align:center; /* 文字居中 */
+
+}
+#footer{
+    width: 480px;
+    height: 50px;
+    background: #666;
+    #bottom: 0;
+    padding: 10px;
+}
+#middle{
+    width: 500px;
+    height: 600px;
+    background: #C0C0C0;
+
+}
+#input{
+    width: 370px;
+    height: 40px;
+    font-size: 20px;
+
+}
+#input_button{
+    width:80px;
+    height:40px;
+    background: #C0C0C0;
+    font-size: 20px;
+    #bottom:15%;
+    position:absolute;
+    margin-left: 12px;
+    margin-top: 4px;
+}
+#input_url{
+    background: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    float: left;
+    margin: 6px 10px 0 10px;
+    max-width: 310px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 3px #ccc;
+    margin-top: 60px;
+    margin-left: 20px;
+
+}
+#input_url_{
+    background: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    float: left;
+    margin: 6px 10px 0 10px;
+    max-width: 310px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 3px #ccc;
+    margin-top: 90px;
+    margin-left: 20px;
+
+}
+#output{
+  background: #7cfc00;
+            padding: 10px;
+            border-radius: 10px;
+            float: right;
+            margin: 6px 10px 0 10px;
+            max-width: 310px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 3px #ccc;
+            margin-top: 60px;
+            margin-right: 20px;
+}
+</style>
+<script type="text/javascript">
+function x(form)
+{
+    url=Trim(form.url.value)
+    if(url == ""){
+        alert("需要下载的网址输入内容为空，请重新输入！");
+        return false;
+    }
+
+    var strRegex="http:\/\/kg.qq.com\/node\/play.+"
+    var re=new RegExp(strRegex);
+
+    if (re.test(url)==true){
+        return true;
+    }
+    else{
+        alert("输入的网址不正确，请参考样例重新输入！");
+        return false;
+    }
+}
+
+function Trim(str)
+{
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+</script>
+    <body>
+        <div id="all">
+            <form action="/kg_result" method="post" onsubmit="return x(this)">
+                <div id="header">播放地址获取工具</div>
+                <div id="middle">
+                    <!--<a id="input_url" href="http://kg.qq.com/node/play?s=j4SSz2jWBTM56jXz" target="_black">样例<br>http://kg.qq.com/node/play?s=j4SSz2jWBTM56jXz</a>-->
+                    <br>
+                    <a id="input_url">输入的url：<br>{{ url }}</a>
+                    <a id="output">{{ playurl }}</a>
+                </div>
+                <div id="footer">
+                    <button type="submit" id="input_button" style="margin-left: 80px;">返回</button>
+                    <button type="submit" id="input_button" style="margin-left: 300px;">
+                        <a href="{{playurl}}" download="下载">下载</a>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

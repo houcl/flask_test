@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <encoding>utf-8</encoding>
+  <url_pattern>http://kg.qq.com/node/play\?s=.*</url_pattern>
+  <match target="items">
+    <xpath>//script[contains(text(),"window.__DATA__ = ")]/text()</xpath>
+  </match>
+</template>

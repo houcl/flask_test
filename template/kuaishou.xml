@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+  <encoding>utf-8</encoding>
+  <url_pattern>https://www.kuaishou.com/photo/.*</url_pattern>
+  <match target="playurl">
+    <xpath>//div[@class="video"]/video/@src</xpath>
+  </match>
+  <match target="title">
+    <xpath>//div[@class="desc"]//div[@class="words"]/p/text()</xpath>
+  </match>
+  <match target="image">
+    <xpath>//div[@class="video"]/video/@poster</xpath>
+  </match>
+  <struct target='items'>
+    <xpath>//ul[@class="photo-list"]/li</xpath>
+    <match target='url'>
+      <xpath>./a/@href</xpath>
+      <prefix no_duplicate='true'>https://www.kuaishou.com</prefix>
+    </match>
+  </struct>
+</template>
