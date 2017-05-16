@@ -150,7 +150,7 @@ def xianhao(msg):
                 data['image'] = image
 
                 with open('xianhao.txt', 'w') as wf:
-                    wf.write(json.dumps(weeks))
+                    wf.write(json.dumps(data))
             else:
                 image = data.get('image')
         else:
