@@ -8,7 +8,7 @@ import json
 import time
 
 import sys
-sys.path.append('../kg_qq')
+sys.path.append('..')
 
 from kg_qq import get_info_ks, get_info_kg, get_info_weizhang
 #from flask_test.kg_qq import get_info_ks, get_info_kg, get_info_weizhang
@@ -149,7 +149,7 @@ def xianhao(msg):
                 data['weeks'] = weeks_now
                 data['image'] = image
 
-                with open('xianhao.txt', 'a') as wf:
+                with open('xianhao.txt', 'w') as wf:
                     wf.write(json.dumps(weeks))
             else:
                 image = data.get('image')
