@@ -21,7 +21,9 @@ from wechatpy.exceptions import InvalidSignatureException
 from wechatpy.events import SubscribeEvent
 from wechatpy.client.api.media import WeChatMedia
 
-
+TOKEN='cl66'
+CorpId='wxe6a9684e18834fcd'
+EncodingAESKey='DkwkHgwUStoLmaoBhQfO2hOaVIdfbdpa9kpq2xBfOHB'
 
 wechat_logger = Log('wechat', log_path='logs/wechat.log', log_level=logging.INFO).log
 
@@ -30,26 +32,29 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def hello_world():
-    signature = request.args.get('signature', None)
-    timestamp = request.args.get('timestamp', None)
-    nonce = request.args.get('nonce')
-
-    check_signature(TOKEN, signature, timestamp, nonce)
-
-    wechat_logger.info('request.args is %s' % request.args)
-
-    crypto = WeChatCrypto(TOKEN, EncodingAESKey, CorpId)
-    echo_str = request.args.get('echostr', '')
     try:
-        echo_str = crypto.check_signature(
-            signature,
-            timestamp,
-            nonce,
-            echo_str
-        )
-    except InvalidSignatureException:
-        abort(403)
-    return echo_str
+        signature = request.args.get('signature', None)
+        timestamp = request.args.get('timestamp', None)
+        nonce = request.args.get('nonce')
+
+        check_signature(TOKEN, signature, timestamp, nonce)
+
+        wechat_logger.info('request.args is %s' % request.args)
+
+        crypto = WeChatCrypto(TOKEN, EncodingAESKey, CorpId)
+        echo_str = request.args.get('echostr', '')
+        try:
+            echo_str = crypto.check_signature(
+                signature,
+                timestamp,
+                nonce,
+                echo_str
+            )
+        except InvalidSignatureException:
+            abort(403)
+        return echo_str
+    except:
+        return 'error'
 
 
 

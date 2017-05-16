@@ -6,12 +6,20 @@ import time
 import json
 from scrapy.spider import BaseSpider
 import scrapy
+import logging
 
 from wechat_sv.common.domain_parser import query_domain_from_url
 from wechat_sv.items import WechatSvItem
+from wechat_sv.common.utils import get_mongo_client
+from wechat_sv.common.logutil import Log
 
+spider_logger = Log('wechat', log_path='logs/spider.log', log_level=logging.DEBUG).log
 
 class Short_VideoSpider(BaseSpider):
+    def __init__(self):
+        self.mongo_client = get_mongo_client('/config/mongo.config')
+        self.db = self.mongo_client.wechat
+
     name = "sv"
 
     start_urls = [
@@ -19,27 +27,35 @@ class Short_VideoSpider(BaseSpider):
     ]
 
     def parse(self, response):
-        #print(response.body)
+
+        urls = None
         item = WechatSvItem()
-
-        # if 'www.kuaishou.com' in response.url:
-        #     pass
-
-        item["stream"], item["title"], item["image"], urls = get_info_ks(response.url, response.body)
-
         item["source"] = query_domain_from_url(response.url)
-
         item["createtime"] = int(time.time())
         item["url"] = response.url
 
-        yield item
+        if item["source"] == "kuaishou.com":
+            item["stream"], item["title"], item["image"], urls = get_info_ks(response.url, response.body)
 
-        for url in urls:
-            print(url)
+        mongo_data = self.db.short_video.find_one({"url":item["url"]})
 
-            yield scrapy.Request(url,
-                                 callback=self.parse,
-                                 )
+        if not mongo_data:
+            spider_logger.info('new add url is %s' % item["url"])
+            yield item
+        else:
+            spider_logger.info('url: %s have in mongo' % item["url"])
+
+
+        if urls:
+            for url in urls:
+                mongo_data = self.db.short_video.find_one({"url": url})
+                if not mongo_data:
+                    spider_logger.info('next parse url is %s' % item["url"])
+                    yield scrapy.Request(url,
+                                         callback=self.parse,
+                                         )
+                else:
+                    spider_logger.info('url: %s have in mongo' % url)
 
 
 def base_xpath(url, html):
