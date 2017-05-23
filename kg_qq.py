@@ -133,6 +133,8 @@ def get_info_kg(url):
             playurl = v.get("detail", None).get("playurl", None)
             song_name = v.get("detail", None).get("song_name", None)
             image = v.get("detail", None).get("cover", None)
+            if not playurl:
+                playurl = v.get("detail", None).get("playurl_video", None)
         return playurl, song_name, image
 
 def get_info_weizhang(url):
